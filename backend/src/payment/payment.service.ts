@@ -295,25 +295,6 @@ export class PaymentService {
     return { status: queryResult.trade_state.toLowerCase(), needUpdate: false };
   }
 
-  /**
-   * 开发环境：模拟支付成功，便于 H5 端到端测试
-   */
-  async mockPaymentSuccess(orderId: string) {
-    const order = await this.prisma.order.findUnique({
-      where: { id: orderId },
-      include: { payment: true },
-    });
-    if (!order) {
-      throw new NotFoundException('订单不存在');
-    }
-    if (order.status === OrderStatus.PAID || order.status === OrderStatus.COMPLETED) {
-      return { status: 'paid', needUpdate: false };
-    }
-    // 生成模拟交易号
-    const txId = `mock_tx_${Date.now()}`;
-    await this.handlePaymentSuccess(orderId, txId);
-    return { status: 'paid', needUpdate: true };
-  }
 
   /**
    * 模拟支付成功 (仅开发环境使用)

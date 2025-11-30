@@ -105,7 +105,7 @@ export class PaymentController {
     }
     const userId = req['user'].userId;
     await this.paymentService.getPaymentDetail(userId, orderId);
-    return this.paymentService.mockPaymentSuccess(orderId);
+    return this.paymentService.mockPaymentSuccess(userId, orderId);
   }
 
   /**
