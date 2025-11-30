@@ -13,6 +13,7 @@ export class FeedService {
    * 获取个人 Feed (关注的人的动态)
    */
   async getPersonalFeed(userId: string, cursor?: string, limit = 20) {
+    const limitNum = Math.min(100, Math.max(1, Number(limit ?? 20)));
     // 获取关注的用户列表
     const followingIds = await this.followService.getFollowingIds(userId);
 
@@ -29,7 +30,7 @@ export class FeedService {
       where: {
         userId: { in: followingIds },
       },
-      take: limit,
+      take: limitNum,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: { createdAt: 'desc' },
@@ -57,7 +58,7 @@ export class FeedService {
 
     return {
       posts,
-      nextCursor: posts.length === limit ? posts[posts.length - 1].id : null,
+      nextCursor: posts.length === limitNum ? posts[posts.length - 1].id : null,
     };
   }
 
@@ -65,10 +66,11 @@ export class FeedService {
    * 获取推荐 Feed (热门帖子)
    */
   async getRecommendFeed(cursor?: string, limit = 20) {
+    const limitNum = Math.min(100, Math.max(1, Number(limit ?? 20)));
     // 简单实现：按照浏览量和点赞数排序
     // TODO: 可以用更复杂的推荐算法
     const posts = await this.prisma.post.findMany({
-      take: limit,
+      take: limitNum,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: [
@@ -99,7 +101,7 @@ export class FeedService {
 
     return {
       posts,
-      nextCursor: posts.length === limit ? posts[posts.length - 1].id : null,
+      nextCursor: posts.length === limitNum ? posts[posts.length - 1].id : null,
     };
   }
 
@@ -107,9 +109,10 @@ export class FeedService {
    * 获取圈子 Feed
    */
   async getCircleFeed(circleId: string, cursor?: string, limit = 20) {
+    const limitNum = Math.min(100, Math.max(1, Number(limit ?? 20)));
     const posts = await this.prisma.post.findMany({
       where: { circleId },
-      take: limit,
+      take: limitNum,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: [
@@ -137,7 +140,7 @@ export class FeedService {
 
     return {
       posts,
-      nextCursor: posts.length === limit ? posts[posts.length - 1].id : null,
+      nextCursor: posts.length === limitNum ? posts[posts.length - 1].id : null,
     };
   }
 
@@ -145,9 +148,10 @@ export class FeedService {
    * 获取用户动态 (用于个人主页)
    */
   async getUserFeed(userId: string, cursor?: string, limit = 20) {
+    const limitNum = Math.min(100, Math.max(1, Number(limit ?? 20)));
     const posts = await this.prisma.post.findMany({
       where: { userId },
-      take: limit,
+      take: limitNum,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: { createdAt: 'desc' },
@@ -175,7 +179,7 @@ export class FeedService {
 
     return {
       posts,
-      nextCursor: posts.length === limit ? posts[posts.length - 1].id : null,
+      nextCursor: posts.length === limitNum ? posts[posts.length - 1].id : null,
     };
   }
 }

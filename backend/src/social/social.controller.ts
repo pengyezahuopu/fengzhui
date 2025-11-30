@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   Headers,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CommentService } from './comment.service';
@@ -94,7 +95,7 @@ export class SocialController {
   async getComments(
     @Param('postId') postId: string,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this.commentService.getComments(postId, cursor, limit);
   }
@@ -103,7 +104,7 @@ export class SocialController {
   async getCommentReplies(
     @Param('id') commentId: string,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this.commentService.getCommentReplies(commentId, cursor, limit);
   }
@@ -154,7 +155,7 @@ export class SocialController {
   async getFollowers(
     @Param('id') userId: string,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this.followService.getFollowers(userId, cursor, limit);
   }
@@ -163,7 +164,7 @@ export class SocialController {
   async getFollowing(
     @Param('id') userId: string,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this.followService.getFollowing(userId, cursor, limit);
   }
@@ -179,7 +180,7 @@ export class SocialController {
   async getPersonalFeed(
     @Headers('x-user-id') userId: string,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this.feedService.getPersonalFeed(userId, cursor, limit);
   }
@@ -187,7 +188,7 @@ export class SocialController {
   @Get('feed/recommend')
   async getRecommendFeed(
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this.feedService.getRecommendFeed(cursor, limit);
   }
@@ -196,7 +197,7 @@ export class SocialController {
   async getCircleFeed(
     @Param('circleId') circleId: string,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this.feedService.getCircleFeed(circleId, cursor, limit);
   }
@@ -205,7 +206,7 @@ export class SocialController {
   async getUserFeed(
     @Param('userId') userId: string,
     @Query('cursor') cursor?: string,
-    @Query('limit') limit?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
     return this.feedService.getUserFeed(userId, cursor, limit);
   }

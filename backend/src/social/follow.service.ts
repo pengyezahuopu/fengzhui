@@ -78,9 +78,10 @@ export class FollowService {
    * 获取粉丝列表
    */
   async getFollowers(userId: string, cursor?: string, limit = 20) {
+    const limitNum = Math.min(100, Math.max(1, Number(limit ?? 20)));
     const follows = await this.prisma.follow.findMany({
       where: { followingId: userId },
-      take: limit,
+      take: limitNum,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: { createdAt: 'desc' },
@@ -101,7 +102,7 @@ export class FollowService {
     return {
       users: follows.map((f) => f.follower),
       nextCursor:
-        follows.length === limit ? follows[follows.length - 1].id : null,
+        follows.length === limitNum ? follows[follows.length - 1].id : null,
     };
   }
 
@@ -109,9 +110,10 @@ export class FollowService {
    * 获取关注列表
    */
   async getFollowing(userId: string, cursor?: string, limit = 20) {
+    const limitNum = Math.min(100, Math.max(1, Number(limit ?? 20)));
     const follows = await this.prisma.follow.findMany({
       where: { followerId: userId },
-      take: limit,
+      take: limitNum,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: { createdAt: 'desc' },
@@ -132,7 +134,7 @@ export class FollowService {
     return {
       users: follows.map((f) => f.following),
       nextCursor:
-        follows.length === limit ? follows[follows.length - 1].id : null,
+        follows.length === limitNum ? follows[follows.length - 1].id : null,
     };
   }
 

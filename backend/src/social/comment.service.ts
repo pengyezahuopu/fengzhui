@@ -99,13 +99,14 @@ export class CommentService {
    * 获取帖子评论列表
    */
   async getComments(postId: string, cursor?: string, limit = 20) {
+    const limitNum = Math.min(100, Math.max(1, Number(limit ?? 20)));
     // 获取一级评论
     const comments = await this.prisma.comment.findMany({
       where: {
         postId,
         parentId: null, // 只获取一级评论
       },
-      take: limit,
+      take: limitNum,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: { createdAt: 'asc' },
@@ -138,7 +139,7 @@ export class CommentService {
     return {
       comments,
       nextCursor:
-        comments.length === limit ? comments[comments.length - 1].id : null,
+        comments.length === limitNum ? comments[comments.length - 1].id : null,
     };
   }
 
@@ -146,9 +147,10 @@ export class CommentService {
    * 获取评论的更多回复
    */
   async getCommentReplies(commentId: string, cursor?: string, limit = 20) {
+    const limitNum = Math.min(100, Math.max(1, Number(limit ?? 20)));
     const replies = await this.prisma.comment.findMany({
       where: { parentId: commentId },
-      take: limit,
+      take: limitNum,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: { createdAt: 'asc' },
@@ -172,7 +174,7 @@ export class CommentService {
     return {
       replies,
       nextCursor:
-        replies.length === limit ? replies[replies.length - 1].id : null,
+        replies.length === limitNum ? replies[replies.length - 1].id : null,
     };
   }
 
