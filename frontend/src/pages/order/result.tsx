@@ -90,6 +90,15 @@ export default function OrderResult() {
     Taro.navigateBack();
   };
 
+  const handleMockPaySuccess = async () => {
+    if (!orderId) return;
+    try {
+      await api.mockPaymentSuccess(orderId);
+      setStatus('success');
+      Taro.showToast({ title: '已模拟支付成功', icon: 'none' });
+    } catch (e) {}
+  };
+
   if (loading) {
     return (
       <View className="order-result loading">
@@ -226,6 +235,14 @@ export default function OrderResult() {
             >
               返回首页
             </Button>
+            {process.env.NODE_ENV === 'development' && (
+              <Button
+                className="action-btn secondary"
+                onClick={handleMockPaySuccess}
+              >
+                模拟支付成功
+              </Button>
+            )}
           </>
         )}
         {status === 'failed' && (
