@@ -1,0 +1,318 @@
+.profile-page {
+  background-color: #f7f8fa;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.user-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px 30px;
+  color: #fff;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+
+    .avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 35px;
+      overflow: hidden;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      margin-right: 15px;
+
+      image {
+        width: 100%;
+        height: 100%;
+      }
+
+      .avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        text {
+          font-size: 28px;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .info {
+      flex: 1;
+
+      .nickname {
+        font-size: 20px;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .phone {
+        font-size: 14px;
+        opacity: 0.8;
+        display: block;
+      }
+
+      .login-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 8px 20px;
+        font-size: 14px;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.stats-section {
+  display: flex;
+  background: #fff;
+  margin: -20px 15px 0;
+  border-radius: 12px;
+  padding: 20px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1;
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #f0f0f0;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    .value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .label {
+      font-size: 12px;
+      color: #999;
+    }
+  }
+}
+
+.menu-section {
+  background: #fff;
+  margin: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    padding: 15px 15px 10px;
+    display: block;
+  }
+
+  .menu-list {
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #f5f5f5;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 12px;
+
+        &.primary {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        &.success {
+          background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+        }
+
+        &.warning {
+          background: linear-gradient(135deg, #faad14 0%, #ffc53d 100%);
+        }
+
+        &.info {
+          background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+        }
+
+        text {
+          color: #fff;
+          font-size: 18px;
+        }
+      }
+
+      .content {
+        flex: 1;
+
+        .title {
+          font-size: 15px;
+          color: #333;
+          display: block;
+        }
+
+        .desc {
+          font-size: 12px;
+          color: #999;
+          margin-top: 2px;
+          display: block;
+        }
+      }
+
+      .arrow {
+        color: #ccc;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.enrollments-section {
+  background: #fff;
+  margin: 15px;
+  border-radius: 12px;
+  padding: 15px;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .more {
+      font-size: 12px;
+      color: #999;
+    }
+  }
+
+  .enrollment-list {
+    .enrollment-item {
+      display: flex;
+      padding: 12px 0;
+      border-bottom: 1px solid #f5f5f5;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .activity-image {
+        width: 80px;
+        height: 60px;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-right: 12px;
+        flex-shrink: 0;
+
+        image {
+          width: 100%;
+          height: 100%;
+        }
+
+        .image-placeholder {
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          text {
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .activity-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .activity-title {
+          font-size: 14px;
+          font-weight: 500;
+          color: #333;
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .activity-time {
+          font-size: 12px;
+          color: #999;
+          display: block;
+        }
+      }
+
+      .status-tag {
+        align-self: flex-start;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+
+        &.pending {
+          background: #fff7e6;
+          color: #fa8c16;
+        }
+
+        &.confirmed {
+          background: #f6ffed;
+          color: #52c41a;
+        }
+
+        &.cancelled {
+          background: #fff1f0;
+          color: #ff4d4f;
+        }
+
+        &.completed {
+          background: #e6f7ff;
+          color: #1890ff;
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 30px 0;
+
+    .empty-text {
+      font-size: 14px;
+      color: #999;
+      display: block;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.logout-section {
+  margin: 15px;
+  padding-bottom: 20px;
+}

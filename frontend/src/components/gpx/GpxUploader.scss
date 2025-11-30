@@ -1,0 +1,229 @@
+.gpx-uploader {
+  padding: 16px;
+
+  .upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    border: 2px dashed #d9d9d9;
+    border-radius: 12px;
+    background: #fafafa;
+    transition: all 0.3s ease;
+
+    &:active {
+      border-color: #667eea;
+      background: #f0f2ff;
+    }
+
+    &.loading {
+      opacity: 0.7;
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .upload-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .upload-hint {
+      font-size: 12px;
+      color: #999;
+    }
+  }
+
+  .upload-progress {
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .file-name {
+        font-size: 14px;
+        color: #333;
+        font-weight: 500;
+        max-width: 70%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .progress-text {
+        font-size: 14px;
+        color: #667eea;
+        font-weight: 600;
+      }
+    }
+
+    .progress-hint {
+      display: block;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin-top: 12px;
+    }
+  }
+
+  .upload-success {
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+    .success-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+
+      .success-icon {
+        font-size: 24px;
+        margin-right: 8px;
+      }
+
+      .success-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #52c41a;
+      }
+    }
+
+    .result-preview {
+      background: #f7f8fa;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+
+      .route-name {
+        display: block;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+
+      .stats-row {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 12px;
+
+        .stat-item {
+          text-align: center;
+
+          .stat-value {
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+          }
+
+          .stat-label {
+            font-size: 12px;
+            color: #999;
+          }
+        }
+      }
+
+      .point-info {
+        text-align: center;
+        padding-top: 8px;
+        border-top: 1px solid #e8e8e8;
+
+        .point-count {
+          font-size: 12px;
+          color: #666;
+        }
+      }
+    }
+
+    .retry-btn {
+      width: 100%;
+    }
+  }
+
+  .upload-error {
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+    .error-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+
+      .error-icon {
+        font-size: 32px;
+        margin-right: 8px;
+      }
+
+      .error-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #f5222d;
+      }
+    }
+
+    .error-detail {
+      background: #fff2f0;
+      border: 1px solid #ffccc7;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+
+      .error-message {
+        display: block;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .error-suggestion {
+        display: block;
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 8px;
+        padding-left: 12px;
+        border-left: 3px solid #ffa39e;
+      }
+
+      .error-technical {
+        display: block;
+        font-size: 11px;
+        color: #999;
+        word-break: break-all;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px dashed #ffccc7;
+      }
+    }
+
+    .error-code {
+      text-align: center;
+      font-size: 11px;
+      color: #bbb;
+      margin-bottom: 16px;
+    }
+
+    .retry-btn {
+      width: 100%;
+    }
+  }
+}

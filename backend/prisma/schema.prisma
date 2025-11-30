@@ -1,0 +1,747 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis]
+}
+
+model User {
+  id            String         @id @default(uuid())
+  openId        String?        @unique
+  phone         String?        @unique
+  nickname      String?
+  avatarUrl     String?
+  role          Role           @default(USER)
+  status        UserStatus     @default(ACTIVE)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  ownedClubs    Club[]         @relation("ClubOwner")
+  enrollments   Enrollment[]
+  leaderProfile LeaderProfile?
+
+  // Phase 3: Social relations
+  posts          Post[]
+  comments       Comment[]
+  postLikes      PostLike[]
+  commentLikes   CommentLike[]
+  followers      Follow[]        @relation("Following")
+  following      Follow[]        @relation("Followers")
+  createdCircles Circle[]        @relation("CircleCreator")
+  circleMembers  CircleMember[]
+  activityPhotos ActivityPhoto[]
+  userBadges     UserBadge[]
+  notifications  Notification[]
+  createdRoutes  Route[]         @relation("RouteCreator")
+
+  // Phase 4: Order relations
+  orders         Order[]
+}
+
+model LeaderProfile {
+  id              String       @id @default(uuid())
+  userId          String       @unique
+  realName        String
+  idCard          String
+  certificate     String[]
+  bio             String?
+  experience      Int          @default(0)
+  rating          Float        @default(5.0)
+  ledActivities   Activity[]
+  clubMemberships ClubMember[]
+  user            User         @relation(fields: [userId], references: [id])
+}
+
+model Club {
+  id          String       @id @default(uuid())
+  name        String
+  logo        String?
+  description String?
+  ownerId     String
+  balance     Decimal      @default(0) @db.Decimal(10, 2)
+  isVerified  Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  activities  Activity[]
+  owner       User         @relation("ClubOwner", fields: [ownerId], references: [id])
+  members     ClubMember[]
+
+  // Phase 3: Official circles
+  circles     Circle[]
+
+  // Phase 4: Finance & Settlement
+  defaultRefundPolicyId String?
+  account               ClubAccount?
+  transactions          Transaction[]
+  withdrawals           Withdrawal[]
+  settlements           Settlement[]
+  refundPolicies        RefundPolicy[]
+}
+
+model ClubMember {
+  id       String         @id @default(uuid())
+  clubId   String
+  leaderId String?
+  role     ClubRole       @default(MEMBER)
+  joinedAt DateTime       @default(now())
+  club     Club           @relation(fields: [clubId], references: [id])
+  leader   LeaderProfile? @relation(fields: [leaderId], references: [id])
+
+  @@unique([clubId, leaderId])
+}
+
+model Route {
+  id            String                   @id @default(uuid())
+  name          String
+  difficulty    Int                      @default(1)
+  distance      Float
+  elevation     Int
+  gpxUrl        String?
+  createdAt     DateTime                 @default(now())
+  geometry      Unsupported("geometry")?
+  description   String?
+  coverUrl      String?
+  startPoint    Unsupported("geometry")?
+  endPoint      Unsupported("geometry")?
+  region        String?
+  estimatedTime Int?
+  activities    Activity[]
+
+  // Phase 3: Route contributor
+  creatorId     String?
+  creator       User?    @relation("RouteCreator", fields: [creatorId], references: [id])
+  posts         Post[]
+
+  @@index([endPoint], map: "idx_route_endpoint", type: Gist)
+  @@index([geometry], map: "idx_route_geometry", type: Gist)
+  @@index([startPoint], map: "idx_route_startpoint", type: Gist)
+}
+
+model Activity {
+  id          String         @id @default(uuid())
+  title       String
+  coverUrl    String?
+  startTime   DateTime
+  endTime     DateTime
+  routeId     String
+  clubId      String
+  leaderId    String
+  price       Decimal        @db.Decimal(10, 2)
+  maxPeople   Int
+  minPeople   Int            @default(5)
+  status      ActivityStatus @default(DRAFT)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  club        Club           @relation(fields: [clubId], references: [id])
+  leader      LeaderProfile  @relation(fields: [leaderId], references: [id])
+  route       Route          @relation(fields: [routeId], references: [id])
+  enrollments Enrollment[]
+
+  // Phase 3: Social content
+  posts       Post[]
+  photos      ActivityPhoto[]
+
+  // Phase 4: Orders, Finance & Policy
+  refundPolicyId     String?
+  insuranceProductId String?
+  refundPolicy       RefundPolicy?     @relation(fields: [refundPolicyId], references: [id])
+  insuranceProduct   InsuranceProduct? @relation(fields: [insuranceProductId], references: [id])
+  orders             Order[]
+  transactions       Transaction[]
+  settlement         Settlement?
+}
+
+model Enrollment {
+  id           String       @id @default(uuid())
+  activityId   String
+  userId       String
+  status       EnrollStatus @default(PENDING)
+  amount       Decimal      @db.Decimal(10, 2)
+  contactName  String
+  contactPhone String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  activity     Activity     @relation(fields: [activityId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+
+  // Phase 4: Order relation
+  order        Order?
+}
+
+// ==================== Phase 3: Social Models ====================
+
+// 帖子/动态
+model Post {
+  id          String      @id @default(uuid())
+  userId      String
+  content     String
+  activityId  String?
+  routeId     String?
+  circleId    String?
+  tags        String[]
+  viewCount   Int         @default(0)
+  isTop       Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id])
+  activity    Activity?   @relation(fields: [activityId], references: [id])
+  route       Route?      @relation(fields: [routeId], references: [id])
+  circle      Circle?     @relation(fields: [circleId], references: [id])
+  images      PostImage[]
+  comments    Comment[]
+  likes       PostLike[]
+
+  @@index([userId])
+  @@index([circleId])
+  @@index([createdAt])
+}
+
+// 帖子图片
+model PostImage {
+  id        String   @id @default(uuid())
+  postId    String
+  url       String
+  width     Int?
+  height    Int?
+  sortOrder Int      @default(0)
+
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+// 帖子点赞
+model PostLike {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+}
+
+// 评论 (重构版)
+model Comment {
+  id        String        @id @default(uuid())
+  postId    String
+  userId    String
+  content   String
+  parentId  String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id])
+  parent    Comment?      @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[]     @relation("CommentReplies")
+  likes     CommentLike[]
+
+  @@index([postId])
+}
+
+// 评论点赞
+model CommentLike {
+  id        String   @id @default(uuid())
+  commentId String
+  userId    String
+  createdAt DateTime @default(now())
+
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([commentId, userId])
+}
+
+// 用户关注关系
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower    User     @relation("Followers", fields: [followerId], references: [id])
+  following   User     @relation("Following", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+// 圈子
+model Circle {
+  id          String         @id @default(uuid())
+  name        String
+  description String?
+  icon        String?
+  coverUrl    String?
+  category    CircleCategory @default(INTEREST)
+  creatorId   String
+  clubId      String?
+  isOfficial  Boolean        @default(false)
+  memberCount Int            @default(0)
+  postCount   Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  creator     User           @relation("CircleCreator", fields: [creatorId], references: [id])
+  club        Club?          @relation(fields: [clubId], references: [id])
+  members     CircleMember[]
+  posts       Post[]
+
+  @@index([category])
+}
+
+// 圈子成员
+model CircleMember {
+  id       String     @id @default(uuid())
+  circleId String
+  userId   String
+  role     CircleRole @default(MEMBER)
+  joinedAt DateTime   @default(now())
+
+  circle   Circle     @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id])
+
+  @@unique([circleId, userId])
+}
+
+// 活动相册照片
+model ActivityPhoto {
+  id          String   @id @default(uuid())
+  activityId  String
+  userId      String
+  url         String
+  description String?
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  activity    Activity @relation(fields: [activityId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([activityId])
+}
+
+// 勋章定义
+model Badge {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  icon        String
+  description String
+  category    BadgeCategory
+  criteria    Json
+  sortOrder   Int           @default(0)
+
+  userBadges  UserBadge[]
+}
+
+// 用户获得的勋章
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  badgeId   String
+  earnedAt  DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+}
+
+// 通知
+model Notification {
+  id         String           @id @default(uuid())
+  userId     String
+  type       NotificationType
+  title      String
+  content    String?
+  targetId   String?
+  targetType String?
+  isRead     Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+
+  user       User             @relation(fields: [userId], references: [id])
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+enum Role {
+  USER
+  LEADER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  BANNED
+}
+
+enum ClubRole {
+  OWNER
+  ADMIN
+  LEADER
+  MEMBER
+}
+
+enum ActivityStatus {
+  DRAFT
+  PUBLISHED
+  FULL
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum EnrollStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
+  CHECKED_IN
+}
+
+// ==================== Phase 3: New Enums ====================
+
+enum CircleCategory {
+  PROFESSION  // 职业圈
+  INTEREST    // 兴趣圈
+  REGION      // 地区圈
+  ACTIVITY    // 活动圈
+}
+
+enum CircleRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum BadgeCategory {
+  MILESTONE     // 里程碑
+  CUMULATIVE    // 累计型
+  CHALLENGE     // 挑战型
+  SPECIAL       // 特殊型
+  SOCIAL        // 社交型
+  CONTRIBUTION  // 贡献型
+  LEADER        // 领队专属
+}
+
+enum NotificationType {
+  LIKE        // 点赞
+  COMMENT     // 评论
+  FOLLOW      // 关注
+  BADGE       // 获得勋章
+  ACTIVITY    // 活动相关
+  SYSTEM      // 系统通知
+}
+
+// ==================== Phase 4: Order & Payment Models ====================
+
+// 退款策略
+model RefundPolicy {
+  id                  String     @id @default(uuid())
+  name                String     // 策略名称
+  description         String?
+  rules               String     // JSON: [{"hoursBeforeStart": 168, "refundPercent": 100}, ...]
+  noRefundHours       Int        @default(24)
+  cancelRefundPercent Int        @default(100)
+  clubId              String?
+  isDefault           Boolean    @default(false)
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  club                Club?      @relation(fields: [clubId], references: [id])
+  activities          Activity[]
+
+  @@index([clubId])
+}
+
+// 保险产品配置
+model InsuranceProduct {
+  id              String      @id @default(uuid())
+  name            String
+  provider        String
+  description     String?
+  price           Decimal     @db.Decimal(10, 2)
+  priceUnit       String      @default("PER_PERSON_DAY")
+  coverage        String?     // JSON
+  maxCompensation Decimal?    @db.Decimal(12, 2)
+  isActive        Boolean     @default(true)
+  sortOrder       Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  insurances      Insurance[]
+  activities      Activity[]
+}
+
+// 订单
+model Order {
+  id            String      @id @default(uuid())
+  orderNo       String      @unique
+  userId        String
+  activityId    String
+  enrollmentId  String      @unique
+
+  // 金额
+  amount        Decimal     @db.Decimal(10, 2)
+  insuranceFee  Decimal     @db.Decimal(10, 2) @default(0)
+  totalAmount   Decimal     @db.Decimal(10, 2)
+
+  // 状态
+  status        OrderStatus @default(PENDING)
+  paymentMethod String      @default("WECHAT")
+
+  // 时间
+  paidAt        DateTime?
+  cancelledAt   DateTime?
+  refundedAt    DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  expiresAt     DateTime
+
+  // 核销
+  verifyCode    String?     @unique
+  verifiedAt    DateTime?
+  verifiedBy    String?
+
+  // 关联
+  user          User        @relation(fields: [userId], references: [id])
+  activity      Activity    @relation(fields: [activityId], references: [id])
+  enrollment    Enrollment  @relation(fields: [enrollmentId], references: [id])
+  payment       Payment?
+  refund        Refund?
+  insurance     Insurance?
+
+  @@index([userId])
+  @@index([activityId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// 支付记录
+model Payment {
+  id            String        @id @default(uuid())
+  orderId       String        @unique
+  amount        Decimal       @db.Decimal(10, 2)
+  gateway       String        @default("WECHAT")
+  prepayId      String?
+  transactionId String?
+  openId        String?
+  status        PaymentStatus @default(PENDING)
+  nonceStr      String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  order         Order         @relation(fields: [orderId], references: [id])
+
+  @@index([transactionId])
+}
+
+// 退款记录
+model Refund {
+  id           String       @id @default(uuid())
+  orderId      String       @unique
+  refundNo     String       @unique
+  amount       Decimal      @db.Decimal(10, 2)
+  reason       RefundReason
+  reasonDetail String?
+  status       RefundStatus @default(PENDING)
+  reviewedBy   String?
+  reviewedAt   DateTime?
+  rejectReason String?
+  wxRefundId   String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  order        Order        @relation(fields: [orderId], references: [id])
+}
+
+// 保险记录 (记账式)
+model Insurance {
+  id           String          @id @default(uuid())
+  orderId      String          @unique
+  productId    String
+  amount       Decimal         @db.Decimal(10, 2)
+  insuredName  String
+  insuredIdCard String?
+  insuredPhone String
+  policyNo     String?
+  policyUrl    String?
+  startDate    DateTime
+  endDate      DateTime
+  status       InsuranceStatus @default(PENDING)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  order        Order            @relation(fields: [orderId], references: [id])
+  product      InsuranceProduct @relation(fields: [productId], references: [id])
+
+  @@index([status])
+  @@index([startDate])
+}
+
+// ==================== Phase 4: Finance Models ====================
+
+// 俱乐部账户
+model ClubAccount {
+  id            String   @id @default(uuid())
+  clubId        String   @unique
+  balance       Decimal  @db.Decimal(12, 2) @default(0)
+  frozenBalance Decimal  @db.Decimal(12, 2) @default(0)
+  totalIncome   Decimal  @db.Decimal(12, 2) @default(0)
+  totalWithdraw Decimal  @db.Decimal(12, 2) @default(0)
+  bankName      String?
+  bankAccount   String?
+  accountName   String?
+  updatedAt     DateTime @updatedAt
+
+  club          Club     @relation(fields: [clubId], references: [id])
+}
+
+// 资金流水
+model Transaction {
+  id            String            @id @default(uuid())
+  clubId        String
+  activityId    String?
+  orderId       String?
+  amount        Decimal           @db.Decimal(10, 2)
+  type          TransactionType
+  status        TransactionStatus @default(COMPLETED)
+  balanceBefore Decimal           @db.Decimal(12, 2)
+  balanceAfter  Decimal           @db.Decimal(12, 2)
+  description   String?
+  createdAt     DateTime          @default(now())
+
+  club          Club              @relation(fields: [clubId], references: [id])
+  activity      Activity?         @relation(fields: [activityId], references: [id])
+
+  @@index([clubId])
+  @@index([activityId])
+  @@index([createdAt])
+}
+
+// 提现申请
+model Withdrawal {
+  id            String           @id @default(uuid())
+  withdrawalNo  String           @unique
+  clubId        String
+  amount        Decimal          @db.Decimal(10, 2)
+  fee           Decimal          @db.Decimal(10, 2) @default(0)
+  actualAmount  Decimal          @db.Decimal(10, 2)
+  status        WithdrawalStatus @default(PENDING)
+  reviewedBy    String?
+  reviewedAt    DateTime?
+  rejectReason  String?
+  transferredAt DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  club          Club             @relation(fields: [clubId], references: [id])
+
+  @@index([clubId])
+  @@index([status])
+}
+
+// 结算记录
+model Settlement {
+  id               String           @id @default(uuid())
+  settlementNo     String           @unique
+  activityId       String           @unique
+  clubId           String
+  totalAmount      Decimal          @db.Decimal(10, 2)
+  platformFee      Decimal          @db.Decimal(10, 2)
+  refundAmount     Decimal          @db.Decimal(10, 2) @default(0)
+  settleAmount     Decimal          @db.Decimal(10, 2)
+  commissionDetail String?          // JSON
+  status           SettlementStatus @default(PENDING)
+  settledAt        DateTime?
+  createdAt        DateTime         @default(now())
+
+  activity         Activity         @relation(fields: [activityId], references: [id])
+  club             Club             @relation(fields: [clubId], references: [id])
+
+  @@index([clubId])
+}
+
+// ==================== Phase 4: New Enums ====================
+
+enum OrderStatus {
+  PENDING     // 待支付
+  PAYING      // 支付中
+  PAID        // 已支付
+  CANCELLED   // 已取消
+  REFUNDING   // 退款中
+  REFUNDED    // 已退款
+  COMPLETED   // 已完成
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  CLOSED
+}
+
+enum RefundReason {
+  USER_CANCEL
+  ACTIVITY_CANCEL
+  ACTIVITY_CHANGE
+  OTHER
+}
+
+enum RefundStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PROCESSING
+  COMPLETED
+}
+
+enum InsuranceStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  CLAIMED
+}
+
+enum TransactionType {
+  INCOME
+  REFUND
+  WITHDRAWAL
+  FEE
+  SETTLEMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PROCESSING
+  COMPLETED
+}
+
+enum SettlementStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+}

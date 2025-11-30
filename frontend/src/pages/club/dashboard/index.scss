@@ -1,0 +1,241 @@
+.club-dashboard {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 40px;
+}
+
+.dashboard-loading,
+.dashboard-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 20px;
+}
+
+.section {
+  background-color: #fff;
+  margin-bottom: 20px;
+  padding: 24px;
+
+  &.account-section {
+    padding-bottom: 16px;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  .title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .action {
+    font-size: 26px;
+    color: #4a90e2;
+  }
+}
+
+.balance-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  border-radius: 16px;
+  margin-bottom: 24px;
+
+  .balance-main {
+    .label {
+      font-size: 26px;
+      color: rgba(255, 255, 255, 0.8);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .amount {
+      font-size: 48px;
+      font-weight: 700;
+      color: #fff;
+    }
+  }
+
+  .balance-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+
+    .tip {
+      font-size: 22px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+
+  .value {
+    font-size: 36px;
+    font-weight: 600;
+    color: #333;
+
+    &.primary {
+      color: #4a90e2;
+    }
+
+    &.success {
+      color: #52c41a;
+    }
+
+    &.danger {
+      color: #ff4d4f;
+    }
+  }
+
+  .label {
+    font-size: 24px;
+    color: #999;
+    margin-top: 8px;
+  }
+}
+
+.pending-settlement {
+  background-color: #fff9e6;
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-top: 16px;
+
+  .text {
+    font-size: 26px;
+    color: #faad14;
+  }
+}
+
+.quick-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+
+  .icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+
+  .text {
+    font-size: 24px;
+    color: #666;
+  }
+}
+
+.activity-list {
+  .activity-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .activity-info {
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .title {
+        font-size: 30px;
+        font-weight: 500;
+        color: #333;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-right: 16px;
+      }
+    }
+
+    .meta {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 12px;
+
+      .time,
+      .people,
+      .price {
+        font-size: 24px;
+        color: #999;
+      }
+
+      .price {
+        color: #ff6b35;
+      }
+    }
+  }
+}
+
+.transaction-list {
+  .transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .tx-info {
+    .type {
+      font-size: 28px;
+      font-weight: 500;
+      color: #333;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .desc {
+      font-size: 24px;
+      color: #999;
+    }
+  }
+
+  .tx-amount {
+    text-align: right;
+
+    .amount {
+      font-size: 30px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+
+      &.income {
+        color: #52c41a;
+      }
+
+      &.expense {
+        color: #ff4d4f;
+      }
+    }
+
+    .time {
+      font-size: 22px;
+      color: #bbb;
+    }
+  }
+}

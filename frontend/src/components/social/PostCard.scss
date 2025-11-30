@@ -1,0 +1,191 @@
+.post-card {
+  background: #fff;
+  padding: 24px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+
+  .post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-right: 16px;
+      background: #f5f5f5;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+
+      .nickname {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .time {
+        font-size: 22px;
+        color: #999;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .post-content {
+    margin-bottom: 16px;
+
+    .content-text {
+      font-size: 28px;
+      color: #333;
+      line-height: 1.6;
+      word-break: break-all;
+    }
+
+    .read-more {
+      font-size: 28px;
+      color: #4A90E2;
+      margin-left: 8px;
+    }
+  }
+
+  // 图片网格布局
+  .post-images {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+
+    &.images-1 {
+      grid-template-columns: 1fr;
+      .post-image {
+        max-width: 400px;
+        height: 400px;
+      }
+    }
+
+    &.images-2 {
+      grid-template-columns: 1fr 1fr;
+      .post-image {
+        height: 240px;
+      }
+    }
+
+    &.images-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+      .post-image {
+        height: 180px;
+      }
+    }
+
+    &.images-4 {
+      grid-template-columns: 1fr 1fr;
+      .post-image {
+        height: 200px;
+      }
+    }
+
+    &.images-5,
+    &.images-6 {
+      grid-template-columns: 1fr 1fr 1fr;
+      .post-image {
+        height: 160px;
+      }
+    }
+
+    &.images-7,
+    &.images-8,
+    &.images-9 {
+      grid-template-columns: 1fr 1fr 1fr;
+      .post-image {
+        height: 140px;
+      }
+    }
+
+    .post-image {
+      width: 100%;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    .tag {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: #f5f5f5;
+
+      .tag-icon {
+        font-size: 24px;
+        margin-right: 6px;
+      }
+
+      .tag-text {
+        font-size: 22px;
+        color: #666;
+      }
+
+      &.tag-activity {
+        background: #e8f4fd;
+        .tag-text {
+          color: #4A90E2;
+        }
+      }
+
+      &.tag-route {
+        background: #e8fdf4;
+        .tag-text {
+          color: #34c759;
+        }
+      }
+
+      &.tag-topic {
+        background: #f5f5f5;
+        .tag-text {
+          color: #ff9500;
+        }
+      }
+    }
+  }
+
+  .post-actions {
+    display: flex;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+
+    .action-item {
+      display: flex;
+      align-items: center;
+      margin-right: 48px;
+      padding: 8px 0;
+
+      .action-icon {
+        font-size: 32px;
+        margin-right: 8px;
+      }
+
+      .action-count {
+        font-size: 24px;
+        color: #999;
+      }
+
+      &.liked {
+        .action-count {
+          color: #ff3b30;
+        }
+      }
+    }
+  }
+}

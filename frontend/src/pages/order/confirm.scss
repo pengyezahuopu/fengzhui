@@ -1,0 +1,249 @@
+.order-confirm {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 140px;
+
+  &.loading,
+  &.error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+  }
+
+  .countdown-bar {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+    padding: 20px 30px;
+
+    .countdown-text {
+      color: #fff;
+      font-size: 28px;
+
+      .countdown-time {
+        font-weight: bold;
+        font-size: 32px;
+      }
+    }
+  }
+
+  .section {
+    background: #fff;
+    margin: 20px;
+    border-radius: 16px;
+    padding: 30px;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      font-size: 30px;
+      font-weight: 600;
+      color: #333;
+
+      .required {
+        font-size: 24px;
+        color: #ff6b6b;
+        font-weight: normal;
+      }
+    }
+  }
+
+  .activity-info {
+    .activity-card {
+      display: flex;
+      gap: 24px;
+
+      .cover {
+        width: 180px;
+        height: 120px;
+        border-radius: 12px;
+        flex-shrink: 0;
+      }
+
+      .info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .title {
+          font-size: 30px;
+          font-weight: 600;
+          color: #333;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .date {
+          font-size: 26px;
+          color: #666;
+        }
+
+        .club {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          .club-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+          }
+
+          .club-name {
+            font-size: 24px;
+            color: #999;
+          }
+        }
+      }
+    }
+  }
+
+  .insurance-info {
+    .insurance-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      padding: 24px;
+      color: #fff;
+
+      .insurance-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .name {
+          font-size: 28px;
+          font-weight: 600;
+        }
+
+        .provider {
+          font-size: 24px;
+          opacity: 0.8;
+        }
+      }
+
+      .insurance-detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .price {
+          font-size: 36px;
+          font-weight: bold;
+        }
+
+        .desc {
+          font-size: 24px;
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  .insured-info {
+    .form-item {
+      display: flex;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid #f0f0f0;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .label {
+        width: 140px;
+        font-size: 28px;
+        color: #333;
+        flex-shrink: 0;
+      }
+
+      .input {
+        flex: 1;
+        font-size: 28px;
+        color: #333;
+      }
+    }
+  }
+
+  .fee-detail {
+    .fee-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+
+      .label {
+        font-size: 28px;
+        color: #666;
+      }
+
+      .value {
+        font-size: 28px;
+        color: #333;
+      }
+
+      &.total {
+        border-top: 1px solid #f0f0f0;
+        margin-top: 16px;
+        padding-top: 24px;
+
+        .label {
+          font-weight: 600;
+          color: #333;
+        }
+
+        .value {
+          font-size: 36px;
+          font-weight: bold;
+          color: #ff6b6b;
+        }
+      }
+    }
+  }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 20px 30px;
+    padding-bottom: calc(20px + constant(safe-area-inset-bottom));
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+
+    .price-info {
+      display: flex;
+      flex-direction: column;
+
+      .label {
+        font-size: 24px;
+        color: #999;
+      }
+
+      .price {
+        font-size: 40px;
+        font-weight: bold;
+        color: #ff6b6b;
+      }
+    }
+
+    .pay-btn {
+      width: 280px;
+      height: 88px;
+      border-radius: 44px;
+      font-size: 32px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+    }
+  }
+}

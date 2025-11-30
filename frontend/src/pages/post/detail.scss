@@ -1,0 +1,79 @@
+.post-detail-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+
+  &.loading,
+  &.error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .loading-text,
+    .error-text {
+      font-size: 30px;
+      color: #999;
+    }
+  }
+
+  .detail-scroll {
+    flex: 1;
+    padding-bottom: 160px; // 为底部输入框留出空间
+  }
+
+  .comments-section {
+    margin-top: 16px;
+    padding: 0 16px 16px;
+  }
+
+  .comment-input-wrapper {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+    z-index: 100;
+
+    .reply-hint {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: #f8f8f8;
+      border-bottom: 1px solid #f0f0f0;
+
+      .reply-text {
+        font-size: 24px;
+        color: #666;
+      }
+
+      .cancel-reply {
+        font-size: 24px;
+        color: #4A90E2;
+        padding: 8px;
+      }
+    }
+  }
+}
+
+// PostCard 在详情页的特殊样式
+.post-detail-page {
+  .post-card {
+    margin: 0;
+    border-radius: 0;
+
+    // 详情页显示完整内容
+    .post-content {
+      .content-text {
+        display: block;
+        -webkit-line-clamp: unset;
+      }
+
+      .read-more {
+        display: none;
+      }
+    }
+  }
+}

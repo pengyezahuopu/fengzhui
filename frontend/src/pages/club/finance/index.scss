@@ -1,0 +1,282 @@
+.finance-center {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.account-card {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  padding: 32px 24px;
+  color: #fff;
+}
+
+.balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  .balance-item {
+    .label {
+      font-size: 26px;
+      opacity: 0.8;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .value {
+      font-size: 52px;
+      font-weight: 700;
+    }
+  }
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 16px;
+
+  .stat {
+    text-align: center;
+
+    .value {
+      font-size: 30px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .label {
+      font-size: 24px;
+      opacity: 0.8;
+    }
+  }
+}
+
+.bank-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 16px 20px;
+  border-radius: 8px;
+
+  .text {
+    font-size: 26px;
+    opacity: 0.9;
+  }
+
+  .action {
+    font-size: 26px;
+    color: #fff;
+  }
+}
+
+.tab-container {
+  background-color: #fff;
+  min-height: calc(100vh - 400px);
+}
+
+.tab-loading {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+
+.list-scroll {
+  height: calc(100vh - 500px);
+}
+
+.list-item {
+  padding: 24px;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+
+  .item-left {
+    flex: 1;
+
+    .type {
+      font-size: 30px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .desc {
+      font-size: 26px;
+      color: #666;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .activity {
+      font-size: 24px;
+      color: #999;
+    }
+  }
+
+  .item-right {
+    text-align: right;
+
+    .amount {
+      font-size: 32px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+
+      &.income {
+        color: #52c41a;
+      }
+
+      &.expense {
+        color: #ff4d4f;
+      }
+    }
+
+    .time {
+      font-size: 24px;
+      color: #999;
+    }
+  }
+}
+
+.withdrawal-item,
+.settlement-item {
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .no {
+      font-size: 28px;
+      color: #333;
+      font-family: monospace;
+    }
+  }
+
+  .activity-name {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #eee;
+  }
+
+  .item-body {
+    margin-bottom: 16px;
+  }
+
+  .amount-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+
+    .label {
+      font-size: 26px;
+      color: #666;
+    }
+
+    .value {
+      font-size: 28px;
+      color: #333;
+
+      &.fee,
+      &.refund {
+        color: #ff4d4f;
+      }
+
+      &.actual {
+        color: #52c41a;
+        font-weight: 600;
+      }
+    }
+
+    &.total {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 12px;
+      margin-top: 8px;
+
+      .label {
+        font-weight: 500;
+        color: #333;
+      }
+
+      .value {
+        font-size: 32px;
+        font-weight: 600;
+        color: #52c41a;
+      }
+    }
+  }
+
+  .reject-reason {
+    background-color: #fff2f0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+
+    .label {
+      font-size: 24px;
+      color: #ff4d4f;
+    }
+
+    .text {
+      font-size: 26px;
+      color: #ff4d4f;
+    }
+  }
+
+  .item-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .time {
+      font-size: 24px;
+      color: #999;
+    }
+  }
+}
+
+.bank-form-popup {
+  padding: 32px 24px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+
+  .popup-title {
+    font-size: 34px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .form-content {
+    margin-bottom: 32px;
+  }
+
+  .form-item {
+    margin-bottom: 24px;
+
+    .label {
+      font-size: 28px;
+      color: #333;
+      display: block;
+      margin-bottom: 12px;
+    }
+  }
+
+  .popup-actions {
+    padding-top: 16px;
+  }
+}
